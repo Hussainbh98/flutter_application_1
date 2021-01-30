@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "744679035042",
+    "project_id": "sinorporject",
+    "storage_bucket": "sinorporject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:744679035042:android:d2319d8d41f88b685987fb",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "744679035042-tivisb36tok60arviefr5dnh28kc5apf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0bGWfrrCv_REw_1fNkuv5I-i-c97yKqU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "744679035042-tivisb36tok60arviefr5dnh28kc5apf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
