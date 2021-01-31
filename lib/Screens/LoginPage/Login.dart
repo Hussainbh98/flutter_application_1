@@ -58,6 +58,9 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(
+              height: 30,
+            ),
             Container(
               height: MediaQuery.of(context).size.height / 3,
               width: MediaQuery.of(context).size.width / .5,
@@ -121,8 +124,6 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.all(10.0),
                   child: OutlineButton(
                     onPressed: () {
-                      //https://cdn.dribbble.com/users/2424774/screenshots/6536759/06_protect_your_account.png?compress=1&resize=800x600
-
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => SignIn()));
                     },
@@ -175,7 +176,41 @@ class SignIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: Color(0xffffffff),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                )
+              ],
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height / 3,
+              width: MediaQuery.of(context).size.width / .5,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: NetworkImage(
+                        "https://cdn.dribbble.com/users/2424774/screenshots/6536759/06_protect_your_account.png?compress=1&resize=800x600",
+                      ),
+                      fit: BoxFit.contain)),
+            ),
+            Text(
+              'SignIn',
+              style: TextStyle(
+                fontWeight: FontWeight.w300,
+                fontSize: 30,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
