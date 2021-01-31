@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Models/book.dart';
 import 'package:flutter_application_1/Screens/BookDetail/BookDetailPage.dart';
+import 'package:flutter_application_1/Screens/ThemesPage/%60Themes.dart';
 import 'package:flutter_application_1/Services/getData.dart';
 
 String textFieldValue;
@@ -18,37 +19,51 @@ class _SearchState extends State<Search> {
     return Scaffold(
       appBar: AppBar(
         title: TextField(
-            style: TextStyle(color: Theme.of(context).buttonColor),
-            autofocus: true,
+            cursorColor: Theme.of(context).brightness == Brightness.light
+                ? Colors.white
+                : Theme.of(context).accentColor,
+            style: TextStyle(
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Colors.white
+                    : Theme.of(context).accentColor),
+            autofocus: false,
             decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: 'Egg !',
+                hintText: 'Type Here',
                 hintStyle: TextStyle(
-                    color: MediaQuery.of(context).platformBrightness ==
-                            Brightness.light
-                        ? Colors.white
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Colors.white.withOpacity(.4)
                         : null)),
             onChanged: (String value) {
-              setState(() {
-                value = value.trimLeft();
-                value = value.trimRight();
-                value = value.replaceAll(' ', '+');
-
-                url = newURL;
+              if (value.trim().isEmpty) {
+                value = "egg";
                 newURL = changeDropDownValue(dropdownValue, value);
-                getData();
-              });
+                getSearchData(newURL);
+              }
+              if (value != null) {
+                setState(() {
+                  value = value.trimLeft();
+                  value = value.trimRight();
+                  value = value.replaceAll(' ', '+');
+
+                  url = newURL;
+                  newURL = changeDropDownValue(dropdownValue, value);
+                  getSearchData(newURL);
+                });
+              }
             },
             onSubmitted: (String value) {
-              setState(() {
-                value = value.trimLeft();
-                value = value.trimRight();
-                value = value.replaceAll(' ', '+');
+              if (value != null) {
+                setState(() {
+                  value = value.trimLeft();
+                  value = value.trimRight();
+                  value = value.replaceAll(' ', '+');
 
-                url = newURL;
-                newURL = changeDropDownValue(dropdownValue, value);
-                getData();
-              });
+                  url = newURL;
+                  newURL = changeDropDownValue(dropdownValue, value);
+                  getSearchData(newURL);
+                });
+              }
             }),
         actions: [
           MyDropdownButtonWidget(),
@@ -58,59 +73,54 @@ class _SearchState extends State<Search> {
           )
         ],
       ),
-      body: TheBody(),
-    );
-  }
-}
+      body: FutureBuilder<BookResponse>(
+        future: getSearchData(newURL),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasError) print(snapshot.error);
 
-class TheBody extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<BookResponse>(
-      future: getData(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasError) print(snapshot.error);
-
-        if (snapshot.hasData) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListView.builder(
-                physics: BouncingScrollPhysics(),
-                itemCount: snapshot.data.items.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                      child: ListTile(
-                    trailing:
-                        Text(snapshot.data.items[index].volumeInfo.printType),
-                    onTap: () =>
-                        bookItemPush(context, snapshot.data.items[index]),
-                    title: Text(snapshot.data.items[index].volumeInfo.title),
-                    subtitle: snapshot.data.items[index].volumeInfo.subtitle ==
-                            null
-                        ? null
-                        : Text(snapshot.data.items[index].volumeInfo.subtitle),
-                    leading: snapshot.data.items[index].volumeInfo.imageLinks
-                                .thumbnail ==
-                            null
-                        ? null
-                        : Hero(
-                            tag: snapshot.data.items[index],
-                            child: snapshot.data.items[index].volumeInfo
-                                        .imageLinks.thumbnail !=
-                                    null
-                                ? Image.network(
-                                    snapshot.data.items[index].volumeInfo
-                                        .imageLinks.thumbnail,
-                                  )
-                                : Image.network(
-                                    'https://www.kindpng.com/picc/m/21-214921_page-borders-for-microsoft-word-7-free-download.png')),
-                  ));
-                }),
-          );
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      },
+          if (snapshot.hasData) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: snapshot.data.items.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                        child: ListTile(
+                      trailing:
+                          Text(snapshot.data.items[index].volumeInfo.printType),
+                      onTap: () =>
+                          bookItemPush(context, snapshot.data.items[index]),
+                      title: Text(snapshot.data.items[index].volumeInfo.title),
+                      subtitle: snapshot
+                                  .data.items[index].volumeInfo.subtitle ==
+                              null
+                          ? null
+                          : Text(
+                              snapshot.data.items[index].volumeInfo.subtitle),
+                      leading: snapshot.data.items[index].volumeInfo.imageLinks
+                                  .thumbnail ==
+                              null
+                          ? null
+                          : Hero(
+                              tag: snapshot.data.items[index],
+                              child: snapshot.data.items[index].volumeInfo
+                                          .imageLinks.thumbnail !=
+                                      null
+                                  ? Image.network(
+                                      snapshot.data.items[index].volumeInfo
+                                          .imageLinks.thumbnail,
+                                    )
+                                  : Image.network(
+                                      'https://www.kindpng.com/picc/m/21-214921_page-borders-for-microsoft-word-7-free-download.png')),
+                    ));
+                  }),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
     );
   }
 
@@ -153,8 +163,7 @@ class _MyDropdownButtonWidgetState extends State<MyDropdownButtonWidget> {
           child: Text(
             value,
             style: TextStyle(
-                color: MediaQuery.of(context).platformBrightness ==
-                        Brightness.light
+                color: Theme.of(context).brightness == Brightness.light
                     ? Colors.white
                     : null),
           ),
