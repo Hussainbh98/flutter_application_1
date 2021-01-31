@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Screens/LoginPage/%60Login.dart';
 
-import 'Screens/HomePage/`Home.dart';
-import 'Screens/IntroductionScreen/`Introduction.dart';
+import 'Screens/HomePage/Home.dart';
+import 'Screens/IntroductionScreen/IntroductionPage.dart';
 import 'Screens/ThemesPage/`Themes.dart';
 
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{

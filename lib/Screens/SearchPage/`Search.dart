@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Models/book.dart';
-import 'package:flutter_application_1/Screens/HomePage/BookDetail.dart';
+import 'package:flutter_application_1/Screens/BookDetail/BookDetailPage.dart';
 import 'package:flutter_application_1/Services/getData.dart';
 
 String textFieldValue;
@@ -28,6 +28,17 @@ class _SearchState extends State<Search> {
                             Brightness.light
                         ? Colors.white
                         : null)),
+            onChanged: (String value) {
+              setState(() {
+                value = value.trimLeft();
+                value = value.trimRight();
+                value = value.replaceAll(' ', '+');
+
+                url = newURL;
+                newURL = changeDropDownValue(dropdownValue, value);
+                getData();
+              });
+            },
             onSubmitted: (String value) {
               setState(() {
                 value = value.trimLeft();
