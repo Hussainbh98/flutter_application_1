@@ -5,9 +5,9 @@ import 'package:flutter_application_1/Screens/ThemesPage/themeChanger.dart';
 import 'package:provider/provider.dart';
 
 import '../../routes.dart';
-import '../SearchPage/`Search.dart';
-import 'Widget/Drawer.dart';
-import 'Widget/HomePageBody.dart';
+import '../SearchPage/Search.dart';
+import 'Components/Drawer.dart';
+import 'Components/Body.dart';
 
 User user;
 
@@ -31,7 +31,7 @@ class MaterialAppWithTheme extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: theme.getTheme(),
-      //initialRoute: "//",
+      initialRoute: "//",
       routes: routes,
       home: MyHomePage(),
     );
