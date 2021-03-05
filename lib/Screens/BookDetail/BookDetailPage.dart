@@ -1,13 +1,16 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Models/book.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 import 'package:share/share.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 import 'AboutThatBookPage/Methods/Methods.dart';
 import 'RatingPage/RatingPage.dart';
@@ -16,6 +19,15 @@ class BookDetail extends StatelessWidget {
   BookDetail(this.book);
 
   final book;
+
+  launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +39,42 @@ class BookDetail extends StatelessWidget {
             floating: true,
             snap: true,
             actions: [
+              IconButton(
+                  tooltip: 'QR',
+                  icon: Icon(Icons.qr_code_rounded),
+                  onPressed: () {
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Text(
+                                    "Book QR Code",
+                                    style: TextStyle(fontSize: 25),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    launchURL(book.volumeInfo.previewLink);
+                                  },
+                                  child: QrImage(
+                                    foregroundColor: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(.5),
+                                    data: book.volumeInfo.previewLink,
+                                    version: QrVersions.auto,
+                                    size: 200.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        });
+                  }),
               IconButton(
                   tooltip: 'Share',
                   icon: Icon(Icons.share),
@@ -257,6 +305,8 @@ class BookDetail extends StatelessWidget {
                 ),
               ),
             ),
+
+            //----
 
             // * Similer Books
             Padding(

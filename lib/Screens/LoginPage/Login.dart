@@ -60,19 +60,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<UserCredential> _signInWithGoogle() async {
-    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
-
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-
-    final GoogleAuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    return await FirebaseAuth.instance.signInWithCredential(credential);
-  }
+  Future<UserCredential> _signInWithGoogle() async {}
 
   signOut() async {
     return await FirebaseAuth.instance.signOut();
@@ -240,8 +228,21 @@ class _LoginPageState extends State<LoginPage> {
                           fit: BoxFit.scaleDown,
                         ),
                       ),
-                      onTap: () {
-                        _signInWithGoogle();
+                      onTap: () async {
+                        final GoogleSignInAccount googleUser =
+                            await GoogleSignIn().signIn();
+
+                        final GoogleSignInAuthentication googleAuth =
+                            await googleUser.authentication;
+
+                        final GoogleAuthCredential credential =
+                            GoogleAuthProvider.credential(
+                          accessToken: googleAuth.accessToken,
+                          idToken: googleAuth.idToken,
+                        );
+
+                        return await FirebaseAuth.instance
+                            .signInWithCredential(credential);
                       },
                       title: Text("Sig In with Google"))),
             ),

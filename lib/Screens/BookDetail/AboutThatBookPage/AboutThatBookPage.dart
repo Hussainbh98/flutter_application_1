@@ -21,7 +21,11 @@ class AboutBookIteam extends StatelessWidget {
                     subject: "Book Preview Link",
                     sharePositionOrigin:
                         box.localToGlobal(Offset.zero) & box.size);
-              })
+              }),
+          IconButton(
+              tooltip: 'Share',
+              icon: Icon(Icons.qr_code_rounded),
+              onPressed: () {}),
         ],
       ),
       body: Padding(

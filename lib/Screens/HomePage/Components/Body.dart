@@ -4,11 +4,29 @@ import 'package:flutter_application_1/Services/getData.dart';
 
 import '../../BookDetail/BookDetailPage.dart';
 
-class MyHomePageBody extends StatelessWidget {
+class MyHomePageBody extends StatefulWidget {
+  @override
+  _MyHomePageBodyState createState() => _MyHomePageBodyState();
+}
+
+class _MyHomePageBodyState extends State<MyHomePageBody> {
+  getRomanticBooks() {}
+
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
+        Row(
+          children: [
+            FilterChip(
+                elevation: 5,
+                label: Text("Romantic"),
+                backgroundColor: Colors.transparent,
+                shape: StadiumBorder(
+                    side: BorderSide(color: Theme.of(context).primaryColor)),
+                onSelected: (bool value) {}),
+          ],
+        ),
         Row(
           children: [
             Padding(
@@ -106,14 +124,6 @@ class MyHomePageBody extends StatelessWidget {
                                                   .title
                                                   .substring(0, 20) +
                                               '..')),
-                                  Positioned(
-                                      bottom: -25,
-                                      child: Text(snapshot.data.items[i]
-                                                  .volumeInfo.authors[0] !=
-                                              null
-                                          ? snapshot.data.items[i].volumeInfo
-                                              .volumeInfo.authors[0]
-                                          : '-')),
                                 ],
                               ),
                           ],
